@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloom Mind — Gestión de Libros</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+  <script>
+    if (localStorage.getItem('sesionActiva') !== 'true' || localStorage.getItem('rol') !== 'admin')
+      window.location.href = '/';
+  </script>
+
+  <nav class="admin-nav">
+    <span class="nav-brand">Bloom Mind</span>
+    <div class="nav-links">
+      <a href="/gestion" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        Libros
+      </a>
+      <a href="/admin-prestamos" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>
+        Préstamos
+      </a>
+      <a href="/admin-devoluciones" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.14"/></svg>
+        Devoluciones
+      </a>
+      <a href="/admin-moras" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        Moras
+      </a>
+      <a href="/admin-socios" class="nav-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Socios
+      </a>
+    </div>
+    <button class="nav-salir" onclick="cerrarSesion()">Cerrar sesión</button>
+    <button class="nav-hamburger" id="navHam" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="navMobile">
+    <a href="/gestion" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Libros</a>
+    <a href="/admin-prestamos" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Préstamos</a>
+    <a href="/admin-devoluciones" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.14"/></svg>Devoluciones</a>
+    <a href="/admin-moras" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Moras</a>
+    <a href="/admin-socios" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Socios</a>
+    <div class="nav-mobile-sep"></div>
+    <button class="nav-mobile-salir" onclick="cerrarSesion()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</button>
+  </div>
+  <div class="nav-mobile-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+
+  <div class="page">
+
+    <!-- ENCABEZADO -->
+    <div style="margin-bottom:28px">
+      <h1 class="page-title" style="margin-bottom:4px">Catálogo de Libros</h1>
+      <p class="page-sub" style="margin-bottom:16px" id="bienvenida"></p>
+      <div class="stats-grid" style="margin-bottom:0" id="statsHeader"></div>
+    </div>
+
+    <div class="grid-sidebar">
+
+      <!-- FORMULARIO -->
+      <div class="panel" style="position:sticky;top:72px">
+        <p class="panel-titulo">Agregar / Editar libro</p>
+
+        <div class="campo">
+          <label>Código</label>
+          <input type="text" id="codigo" placeholder="Ej: 017" autocomplete="off"/>
+        </div>
+        <div class="campo">
+          <label>Título</label>
+          <input type="text" id="nombre" placeholder="Nombre del libro"/>
+        </div>
+        <div class="campo">
+          <label>Autor</label>
+          <input type="text" id="autor" placeholder="Nombre del autor"/>
+        </div>
+        <div class="campo">
+          <label>Categoría</label>
+          <select id="categoria">
+            <option value="">Seleccionar...</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Cantidad de ejemplares</label>
+          <input type="number" id="cantidad" placeholder="Ej: 3" min="1"/>
+        </div>
+
+        <div class="btns-fila">
+          <button class="btn btn-primary" style="flex:1" onclick="guardar()">Guardar</button>
+          <button class="btn btn-danger"  onclick="eliminar()">Eliminar</button>
+        </div>
+        <button class="btn btn-outline" style="width:100%;margin-top:8px" onclick="limpiar()">Limpiar formulario</button>
+      </div>
+
+      <!-- CATÁLOGO -->
+      <div class="panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px">
+          <p class="panel-titulo" style="margin-bottom:0">Libros registrados</p>
+          <input type="text" id="filtroCatalogo" placeholder="Buscar título, autor o código..."
+            style="padding:7px 14px;border:1px solid rgba(124,58,237,0.2);border-radius:20px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2d1b69;outline:none;width:100%;max-width:220px"/>
+        </div>
+        <div id="tablaLibros" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px"></div>
+        <div class="vacio" id="vacioCatalogo" style="display:none">
+          <span class="icon" style="font-size:36px">—</span>
+          <p>No hay libros registrados</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    document.getElementById('bienvenida').textContent =
+      'Sesión iniciada como ' + localStorage.getItem('usuario');
+
+    document.querySelectorAll('.nav-link, .nav-mobile-link').forEach(a => {
+      if (a.getAttribute('href') === window.location.pathname) a.classList.add('activo');
+    });
+    function toggleMenu() {
+      document.getElementById('navHam').classList.toggle('open');
+      document.getElementById('navMobile').classList.toggle('open');
+      document.getElementById('navOverlay').classList.toggle('open');
+    }
+
+    function cerrarSesion() { localStorage.clear(); window.location.href = '/'; }
+
+    function toast(msg, tipo = 'ok') {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.className = `toast ${tipo} visible`;
+      setTimeout(() => t.classList.remove('visible'), 3500);
+    }
+
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    let todosLibros = [];
+
+    async function cargarCategorias() {
+      const cats = await fetch('/api/categorias').then(r => r.json());
+      const sel  = document.getElementById('categoria');
+      cats.forEach(c => {
+        const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o);
+      });
+    }
+
+    async function cargarLibros() {
+      todosLibros = await fetch('/api/libros').then(r => r.json());
+      renderStats();
+      renderTabla();
+    }
+
+    function renderStats() {
+      const total      = todosLibros.length;
+      const disponible = todosLibros.reduce((a, l) => a + l.disponible, 0);
+      const prestados  = todosLibros.reduce((a, l) => a + (parseInt(l.cantidad,10) - l.disponible), 0);
+      document.getElementById('statsHeader').innerHTML = `
+        <div class="stat-card" style="padding:14px"><div class="stat-num" style="font-size:1.5rem">${total}</div><div class="stat-label">Títulos</div></div>
+        <div class="stat-card" style="padding:14px"><div class="stat-num" style="font-size:1.5rem;color:#065f46">${disponible}</div><div class="stat-label">Disponibles</div></div>
+        <div class="stat-card" style="padding:14px"><div class="stat-num" style="font-size:1.5rem;color:#7c3aed">${prestados}</div><div class="stat-label">Prestados</div></div>`;
+    }
+
+    const catColor = {
+      "Terror":"#7f1d1d","Accion":"#1e3a8a","Romance":"#9f1239",
+      "Aventura":"#166534","Infantil":"#c2410c","Comedia":"#0369a1",
+      "Novela":"#6d28d9","Clasico":"#78716c","Fantasia":"#4c1d95",
+      "Historia":"#57534e","Ciencia Ficcion":"#1d4ed8"
+    };
+
+    function renderTabla() {
+      const q = document.getElementById('filtroCatalogo').value.toLowerCase();
+      const filtrados = todosLibros.filter(l =>
+        !q || l.nombre.toLowerCase().includes(q) || l.autor.toLowerCase().includes(q) || l.codigo.toLowerCase().includes(q)
+      );
+      const grid = document.getElementById('tablaLibros');
+      const vacio = document.getElementById('vacioCatalogo');
+      if (!filtrados.length) { grid.innerHTML = ''; vacio.style.display = 'block'; return; }
+      vacio.style.display = 'none';
+      const color = l => catColor[l.categoria] || '#4c1d95';
+      grid.innerHTML = filtrados.map(l => `
+        <div onclick="seleccionar('${escHtml(l.codigo)}','${escHtml(l.nombre)}','${escHtml(l.autor)}','${escHtml(l.categoria)}','${escHtml(l.cantidad)}')"
+          style="background:#fff;border:1px solid rgba(124,58,237,0.13);border-radius:14px;overflow:hidden;cursor:pointer;
+                 transition:transform 0.18s,box-shadow 0.18s;display:flex;flex-direction:column;"
+          onmouseenter="this.style.transform='translateY(-3px)';this.style.boxShadow='0 10px 28px rgba(124,58,237,0.16)'"
+          onmouseleave="this.style.transform='';this.style.boxShadow=''">
+          <!-- Banda de color -->
+          <div style="height:6px;background:${color(l)};width:100%"></div>
+          <!-- Cuerpo -->
+          <div style="padding:14px 14px 12px;flex:1;display:flex;flex-direction:column;gap:2px">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:6px;margin-bottom:6px">
+              <code style="font-size:11px;color:${color(l)};background:${color(l)}18;padding:2px 7px;border-radius:5px;font-weight:600;flex-shrink:0">${escHtml(l.codigo)}</code>
+              <span style="font-size:11px;font-weight:600;padding:2px 7px;border-radius:20px;white-space:nowrap;
+                background:${l.disponible > 0 ? '#d1fae5' : '#fee2e2'};
+                color:${l.disponible > 0 ? '#065f46' : '#991b1b'}">
+                ${l.disponible}/${l.cantidad}
+              </span>
+            </div>
+            <div style="font-size:13px;font-weight:600;color:#2d1b69;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${escHtml(l.nombre)}</div>
+            <div style="font-size:11.5px;color:#9d91b8;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escHtml(l.autor)}</div>
+          </div>
+          <!-- Footer categoría -->
+          <div style="padding:8px 14px;border-top:1px solid rgba(124,58,237,0.07)">
+            <span style="font-size:11px;color:${color(l)};font-weight:500">${escHtml(l.categoria)}</span>
+          </div>
+        </div>`).join('');
+    }
+
+    function seleccionar(codigo, nombre, autor, categoria, cantidad) {
+      document.getElementById('codigo').value    = codigo;
+      document.getElementById('nombre').value    = nombre;
+      document.getElementById('autor').value     = autor;
+      document.getElementById('categoria').value = categoria;
+      document.getElementById('cantidad').value  = cantidad;
+    }
+
+    async function guardar() {
+      const datos = {
+        codigo:    document.getElementById('codigo').value.trim(),
+        nombre:    document.getElementById('nombre').value.trim(),
+        autor:     document.getElementById('autor').value.trim(),
+        categoria: document.getElementById('categoria').value,
+        cantidad:  document.getElementById('cantidad').value.trim()
+      };
+      if (!datos.codigo || !datos.nombre || !datos.autor || !datos.categoria || !datos.cantidad)
+        return toast('Completa todos los campos.', 'err');
+      const res  = await fetch('/api/libros', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(datos)
+      });
+      const data = await res.json();
+      toast(data.mensaje, res.ok ? 'ok' : 'err');
+      if (res.ok) { limpiar(); cargarLibros(); }
+    }
+
+    async function eliminar() {
+      const cod = document.getElementById('codigo').value.trim();
+      if (!cod) return toast('Ingresa el código del libro a eliminar.', 'err');
+      if (!confirm(`¿Eliminar el libro con código "${cod}"?`)) return;
+      const res  = await fetch('/api/libros/' + encodeURIComponent(cod), { method: 'DELETE' });
+      const data = await res.json();
+      toast(data.mensaje, res.ok ? 'ok' : 'err');
+      if (res.ok) { limpiar(); cargarLibros(); }
+    }
+
+    function limpiar() {
+      ['codigo','nombre','autor','cantidad'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('categoria').value = '';
+    }
+
+    document.getElementById('codigo').addEventListener('input', async e => {
+      const cod = e.target.value.trim();
+      if (!cod) return;
+      const libro = todosLibros.find(l => l.codigo === cod);
+      if (libro) seleccionar(libro.codigo, libro.nombre, libro.autor, libro.categoria, libro.cantidad);
+    });
+
+    document.getElementById('filtroCatalogo').addEventListener('input', renderTabla);
+
+    cargarCategorias();
+    cargarLibros();
+  </script>
+</body>
+</html>

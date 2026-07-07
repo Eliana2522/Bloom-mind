@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloom Mind — Préstamos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <style>
+    .socio-wrap   { position: relative; }
+    .socio-drop   {
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: #fff; border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 10px; margin-top: 4px;
+      box-shadow: 0 8px 24px rgba(124,58,237,0.12);
+      z-index: 200; max-height: 220px; overflow-y: auto; display: none;
+    }
+    .socio-drop-item {
+      padding: 10px 14px; cursor: pointer; font-size: 13px;
+      border-bottom: 1px solid rgba(124,58,237,0.07); display: flex;
+      justify-content: space-between; align-items: center;
+      transition: background 0.12s;
+    }
+    .socio-drop-item:hover { background: #f5f0ff; }
+    .socio-drop-item:last-child { border-bottom: none; }
+    .socio-sel {
+      background: #f5f0ff; border: 1px solid rgba(124,58,237,0.25);
+      border-radius: 10px; padding: 10px 14px; margin-top: 4px;
+      display: none; align-items: center; justify-content: space-between; gap: 8px;
+    }
+    .socio-sel-info { font-size: 13px; color: #2d1b69; }
+    .socio-sel-info span { font-size: 12px; color: #9d91b8; margin-left: 8px; }
+    .libro-info {
+      background: #f5f0ff; border: 1px solid rgba(124,58,237,0.2);
+      border-radius: 12px; padding: 16px 18px; margin-top: 4px; display: none;
+    }
+    .libro-info.visible { display: block; }
+    .libro-info .titulo  { font-size: 15px; font-weight: 600; color: #2d1b69; margin-bottom: 4px; }
+    .libro-info .meta    { font-size: 13px; color: #7c6fa0; }
+    .libro-info .dispon  { margin-top: 8px; }
+    .fecha-info {
+      background: #faf8ff; border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; color: #4a3f6b; margin-top: 12px;
+    }
+    .fecha-info strong { color: #7c3aed; }
+  </style>
+</head>
+<body>
+  <script>
+    if (localStorage.getItem('sesionActiva') !== 'true' || localStorage.getItem('rol') !== 'admin')
+      window.location.href = '/';
+  </script>
+
+  <nav class="admin-nav">
+    <span class="nav-brand">Bloom Mind</span>
+    <div class="nav-links">
+      <a href="/gestion" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Libros</a>
+      <a href="/admin-prestamos" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Préstamos</a>
+      <a href="/admin-devoluciones" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.14"/></svg>Devoluciones</a>
+      <a href="/admin-moras" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Moras</a>
+      <a href="/admin-socios" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Socios</a>
+    </div>
+    <button class="nav-salir" onclick="cerrarSesion()">Cerrar sesión</button>
+    <button class="nav-hamburger" id="navHam" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="navMobile">
+    <a href="/gestion" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Libros</a>
+    <a href="/admin-prestamos" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Préstamos</a>
+    <a href="/admin-devoluciones" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.14"/></svg>Devoluciones</a>
+    <a href="/admin-moras" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Moras</a>
+    <a href="/admin-socios" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Socios</a>
+    <div class="nav-mobile-sep"></div>
+    <button class="nav-mobile-salir" onclick="cerrarSesion()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</button>
+  </div>
+  <div class="nav-mobile-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+
+  <div class="page">
+    <h1 class="page-title">Registrar Préstamo</h1>
+    <p class="page-sub">Busca el socio por nombre o cédula, luego indica el código del libro.</p>
+
+    <div class="grid-2col">
+
+      <!-- FORMULARIO -->
+      <div class="panel">
+        <p class="panel-titulo">Datos del préstamo</p>
+
+        <!-- BÚSQUEDA DE SOCIO -->
+        <div class="campo">
+          <label>Socio (nombre o cédula)</label>
+          <div class="socio-wrap">
+            <input type="text" id="buscarSocio" placeholder="Escribe para buscar..." autocomplete="off"/>
+            <div class="socio-drop" id="socioDrop"></div>
+          </div>
+          <div class="socio-sel" id="socioSel">
+            <div class="socio-sel-info">
+              <strong id="socioNombreSel"></strong>
+              <span id="socioCedulaSel"></span>
+            </div>
+            <button onclick="limpiarSocio()" style="background:none;border:1px solid rgba(124,58,237,0.3);color:#7c3aed;border-radius:6px;padding:3px 8px;cursor:pointer;font-size:12px">✕ Cambiar</button>
+          </div>
+        </div>
+
+        <!-- BÚSQUEDA DE LIBRO -->
+        <div class="campo">
+          <label>Código del libro</label>
+          <div style="display:flex;gap:8px">
+            <input type="text" id="libroCodigo" placeholder="Ej: 006" style="flex:1"/>
+            <button class="btn btn-outline" onclick="buscarLibro()">Buscar</button>
+          </div>
+        </div>
+
+        <div class="libro-info" id="libroInfo">
+          <div class="titulo"  id="libroNombre"></div>
+          <div class="meta"    id="libroMeta"></div>
+          <div class="dispon"  id="libroDisponible"></div>
+        </div>
+
+        <div class="fecha-info" id="fechaInfo" style="display:none">
+          Préstamo: <strong id="fechaPrestamo"></strong>&nbsp; · &nbsp;Límite: <strong id="fechaLimite"></strong>
+        </div>
+
+        <div class="btns-fila" style="margin-top:16px">
+          <button class="btn btn-primary" onclick="registrarPrestamo()">Registrar préstamo</button>
+          <button class="btn btn-outline" onclick="limpiar()">Limpiar</button>
+        </div>
+      </div>
+
+      <!-- HISTORIAL RECIENTE -->
+      <div class="panel">
+        <p class="panel-titulo">Préstamos recientes</p>
+        <div class="tabla-wrap">
+          <table>
+            <thead><tr><th>Socio</th><th>Libro</th><th>Estado</th></tr></thead>
+            <tbody id="tablaRecientes"></tbody>
+          </table>
+        </div>
+        <div class="vacio" id="vacioRecientes" style="display:none">
+          <span class="icon">—</span><p>No hay préstamos aún</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    document.querySelectorAll('.nav-link, .nav-mobile-link').forEach(a => {
+      if (a.getAttribute('href') === window.location.pathname) a.classList.add('activo');
+    });
+    function toggleMenu() {
+      document.getElementById('navHam').classList.toggle('open');
+      document.getElementById('navMobile').classList.toggle('open');
+      document.getElementById('navOverlay').classList.toggle('open');
+    }
+    function cerrarSesion() { localStorage.clear(); window.location.href = '/'; }
+    function toast(msg, tipo = 'ok') {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.className = `toast ${tipo} visible`;
+      setTimeout(() => t.classList.remove('visible'), 3500);
+    }
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    let socioActual      = null;
+    let libroSeleccionado = null;
+    let buscarTimer;
+
+    /* ── AUTOCOMPLETE SOCIO ── */
+    document.getElementById('buscarSocio').addEventListener('input', e => {
+      clearTimeout(buscarTimer);
+      const q = e.target.value.trim();
+      if (q.length < 2) { ocultarDrop(); return; }
+      buscarTimer = setTimeout(() => buscarSocios(q), 250);
+    });
+
+    document.addEventListener('click', e => {
+      if (!document.querySelector('.socio-wrap').contains(e.target)) ocultarDrop();
+    });
+
+    async function buscarSocios(q) {
+      try {
+        const socios = await fetch(`/api/socios/buscar?q=${encodeURIComponent(q)}`).then(r => r.json());
+        const drop = document.getElementById('socioDrop');
+        if (!socios.length) {
+          drop.innerHTML = '<div class="socio-drop-item" style="color:#9d91b8;cursor:default">Sin resultados</div>';
+          drop.style.display = 'block'; return;
+        }
+        drop.innerHTML = socios.map(s => `
+          <div class="socio-drop-item" onclick="seleccionarSocio(${s.id},'${escHtml(s.nombre)}','${escHtml(s.cedula)}')">
+            <span style="font-weight:500;color:#2d1b69">${escHtml(s.nombre)}</span>
+            <span style="font-size:12px;color:#9d91b8;font-family:monospace">${escHtml(s.cedula)}</span>
+          </div>`).join('');
+        drop.style.display = 'block';
+      } catch (e) { console.error(e); }
+    }
+
+    function ocultarDrop() {
+      document.getElementById('socioDrop').style.display = 'none';
+    }
+
+    function seleccionarSocio(id, nombre, cedula) {
+      socioActual = { id, nombre, cedula };
+      document.getElementById('buscarSocio').value        = '';
+      document.getElementById('buscarSocio').placeholder  = 'Socio seleccionado';
+      document.getElementById('socioNombreSel').textContent = nombre;
+      document.getElementById('socioCedulaSel').textContent = cedula;
+      document.getElementById('socioSel').style.display   = 'flex';
+      ocultarDrop();
+    }
+
+    function limpiarSocio() {
+      socioActual = null;
+      document.getElementById('buscarSocio').value       = '';
+      document.getElementById('buscarSocio').placeholder = 'Escribe para buscar...';
+      document.getElementById('socioSel').style.display  = 'none';
+    }
+
+    /* ── BÚSQUEDA LIBRO ── */
+    async function buscarLibro() {
+      const cod = document.getElementById('libroCodigo').value.trim();
+      if (!cod) { toast('Ingresa un código de libro.', 'err'); return; }
+      try {
+        const libros = await fetch('/api/libros').then(r => r.json());
+        const libro  = libros.find(l => l.codigo === cod);
+        const info   = document.getElementById('libroInfo');
+        if (!libro) {
+          info.classList.remove('visible'); libroSeleccionado = null;
+          toast('Libro no encontrado.', 'err'); return;
+        }
+        libroSeleccionado = libro;
+        document.getElementById('libroNombre').textContent = libro.nombre;
+        document.getElementById('libroMeta').textContent   = `${libro.autor} · ${libro.categoria}`;
+        const dispEl = document.getElementById('libroDisponible');
+        dispEl.innerHTML = libro.disponible > 0
+          ? `<span class="tag tag-activo">${libro.disponible} ejemplar(es) disponible(s)</span>`
+          : `<span class="tag tag-vencido">Sin ejemplares disponibles</span>`;
+        info.classList.add('visible');
+        mostrarFechas();
+      } catch (e) { toast('Error al buscar el libro.', 'err'); }
+    }
+
+    function mostrarFechas() {
+      const hoy    = new Date();
+      const limite = new Date(hoy); limite.setDate(limite.getDate() + 7);
+      const fmt    = d => d.toLocaleDateString('es', { day:'2-digit', month:'2-digit', year:'numeric' });
+      document.getElementById('fechaPrestamo').textContent = fmt(hoy);
+      document.getElementById('fechaLimite').textContent   = fmt(limite);
+      document.getElementById('fechaInfo').style.display   = 'block';
+    }
+
+    /* ── REGISTRAR PRÉSTAMO ── */
+    async function registrarPrestamo() {
+      if (!socioActual)          { toast('Busca y selecciona un socio.', 'err'); return; }
+      const libroCodigo = document.getElementById('libroCodigo').value.trim();
+      if (!libroCodigo)          { toast('Ingresa el código del libro.', 'err'); return; }
+      if (!libroSeleccionado)    { toast('Busca el libro primero.', 'err'); return; }
+      if (libroSeleccionado.disponible <= 0) { toast('No hay ejemplares disponibles.', 'err'); return; }
+      try {
+        const res  = await fetch('/api/prestamos', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ socioId: socioActual.id, libroCodigo })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          const fmt = s => new Date(s + 'T00:00:00').toLocaleDateString('es', { day:'2-digit', month:'2-digit', year:'numeric' });
+          toast(`✓ Préstamo registrado · Devolver antes del ${fmt(data.fechaLimite)}`, 'ok');
+          limpiarSocio(); limpiar(); cargarRecientes();
+        } else {
+          toast(data.mensaje, 'err');
+        }
+      } catch (e) { toast('Error al registrar el préstamo.', 'err'); }
+    }
+
+    function limpiar() {
+      document.getElementById('libroCodigo').value = '';
+      document.getElementById('libroInfo').classList.remove('visible');
+      document.getElementById('fechaInfo').style.display = 'none';
+      libroSeleccionado = null;
+    }
+
+    async function cargarRecientes() {
+      try {
+        const prestamos = await fetch('/api/prestamos').then(r => r.json());
+        const recientes = prestamos.slice(0, 10);
+        const tbody = document.getElementById('tablaRecientes');
+        const vacio = document.getElementById('vacioRecientes');
+        if (!recientes.length) { tbody.innerHTML = ''; vacio.style.display = 'block'; return; }
+        vacio.style.display = 'none';
+        tbody.innerHTML = recientes.map(p => `
+          <tr>
+            <td style="font-size:13px">
+              <div style="font-weight:500">${escHtml(p.nombreSocio)}</div>
+              <div style="font-size:11px;color:#9d91b8;font-family:monospace">${escHtml(p.cedulaSocio)}</div>
+            </td>
+            <td style="font-size:13px">${escHtml(p.nombreLibro)}</td>
+            <td><span class="tag tag-${p.estado}">${p.estado}</span></td>
+          </tr>`).join('');
+      } catch (e) { toast('Error al cargar recientes.', 'err'); }
+    }
+
+    document.getElementById('libroCodigo').addEventListener('keydown', e => {
+      if (e.key === 'Enter') buscarLibro();
+    });
+
+    cargarRecientes();
+  </script>
+</body>
+</html>

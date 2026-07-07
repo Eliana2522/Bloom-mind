@@ -1,0 +1,18 @@
+node_modules/
+*.log
+npm-debug.log*
+
+# Variables de entorno / secretos
+.env
+.env.local
+.env.*.local
+
+# Bases de datos locales
+*.sqlite
+*.sqlite3
+*.db
+
+# Sistema operativo / editor
+.DS_Store
+Thumbs.db
+.vscode/

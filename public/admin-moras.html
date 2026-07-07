@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloom Mind — Moras</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+  <script>
+    if (localStorage.getItem('sesionActiva') !== 'true' || localStorage.getItem('rol') !== 'admin')
+      window.location.href = '/';
+  </script>
+
+  <nav class="admin-nav">
+    <span class="nav-brand">Bloom Mind</span>
+    <div class="nav-links">
+      <a href="/gestion" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Libros</a>
+      <a href="/admin-prestamos" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Préstamos</a>
+      <a href="/admin-devoluciones" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.14"/></svg>Devoluciones</a>
+      <a href="/admin-moras" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Moras</a>
+      <a href="/admin-socios" class="nav-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Socios</a>
+    </div>
+    <button class="nav-salir" onclick="cerrarSesion()">Cerrar sesión</button>
+    <button class="nav-hamburger" id="navHam" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="nav-mobile" id="navMobile">
+    <a href="/gestion" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Libros</a>
+    <a href="/admin-prestamos" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Préstamos</a>
+    <a href="/admin-devoluciones" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.14"/></svg>Devoluciones</a>
+    <a href="/admin-moras" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Moras</a>
+    <a href="/admin-socios" class="nav-mobile-link"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Socios</a>
+    <div class="nav-mobile-sep"></div>
+    <button class="nav-mobile-salir" onclick="cerrarSesion()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</button>
+  </div>
+  <div class="nav-mobile-overlay" id="navOverlay" onclick="toggleMenu()"></div>
+
+  <div class="page">
+    <h1 class="page-title">Control de Moras</h1>
+    <p class="page-sub">Mora de $20 por día de retraso. Se genera al devolver un libro fuera de plazo.</p>
+
+    <div class="stats-grid" id="statsGrid"></div>
+
+    <div class="panel" style="padding:14px 20px;margin-bottom:16px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+        <input type="text" id="filtro" placeholder="Buscar por socio o libro..."
+          style="flex:1;min-width:200px;padding:9px 14px;border:1px solid rgba(124,58,237,0.25);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2d1b69;outline:none"/>
+        <select id="filtroPago"
+          style="padding:9px 14px;border:1px solid rgba(124,58,237,0.25);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;color:#2d1b69;outline:none;background:#fff">
+          <option value="todos">Todas las moras</option>
+          <option value="pendientes">Solo pendientes</option>
+          <option value="pagadas">Solo pagadas</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="tabla-wrap">
+        <table class="tabla-cards">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Socio</th>
+              <th>Libro</th>
+              <th>Fecha devolución</th>
+              <th>Días de retraso</th>
+              <th>Mora</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="tablaBody"></tbody>
+        </table>
+      </div>
+      <div class="vacio" id="vacio" style="display:none">
+        <span class="icon">—</span><p>No hay moras registradas</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    document.querySelectorAll('.nav-link, .nav-mobile-link').forEach(a => {
+      if (a.getAttribute('href') === window.location.pathname) a.classList.add('activo');
+    });
+    function toggleMenu() {
+      document.getElementById('navHam').classList.toggle('open');
+      document.getElementById('navMobile').classList.toggle('open');
+      document.getElementById('navOverlay').classList.toggle('open');
+    }
+    function cerrarSesion() { localStorage.clear(); window.location.href = '/'; }
+    function toast(msg, tipo = 'ok') {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.className = `toast ${tipo} visible`;
+      setTimeout(() => t.classList.remove('visible'), 3500);
+    }
+
+    let todos = [];
+
+    function fmtFecha(s) {
+      if (!s) return '—';
+      return new Date(s + 'T00:00:00').toLocaleDateString('es', { day:'2-digit', month:'2-digit', year:'numeric' });
+    }
+    function escHtml(s) {
+      return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    async function cargar() {
+      try {
+        const data = await fetch('/api/prestamos').then(r => r.json());
+        todos = data.filter(p => p.mora > 0);
+        renderStats();
+        renderTabla();
+      } catch (e) { toast('Error al cargar moras.', 'err'); }
+    }
+
+    function renderStats() {
+      const pendientes   = todos.filter(p => !p.moraPagada);
+      const pagadas      = todos.filter(p =>  p.moraPagada);
+      const totalPend    = pendientes.reduce((a, p) => a + p.mora, 0);
+      const totalCobrado = pagadas.reduce((a, p) => a + p.mora, 0);
+      document.getElementById('statsGrid').innerHTML = `
+        <div class="stat-card"><div class="stat-num">${todos.length}</div><div class="stat-label">Total con mora</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#991b1b">${pendientes.length}</div><div class="stat-label">Pendientes de pago</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#92400e">$${totalPend}</div><div class="stat-label">Monto pendiente</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#065f46">$${totalCobrado}</div><div class="stat-label">Total cobrado</div></div>`;
+    }
+
+    function renderTabla() {
+      const q    = document.getElementById('filtro').value.toLowerCase();
+      const pago = document.getElementById('filtroPago').value;
+      const filtrados = todos.filter(p => {
+        const matchQ = !q || p.nombreSocio.toLowerCase().includes(q)
+                          || p.cedulaSocio.toLowerCase().includes(q)
+                          || p.nombreLibro.toLowerCase().includes(q);
+        const matchP = pago === 'todos' || (pago === 'pendientes' ? !p.moraPagada : p.moraPagada);
+        return matchQ && matchP;
+      });
+
+      const tbody = document.getElementById('tablaBody');
+      const vacio = document.getElementById('vacio');
+      if (!filtrados.length) { tbody.innerHTML = ''; vacio.style.display = 'block'; return; }
+      vacio.style.display = 'none';
+
+      tbody.innerHTML = filtrados.map(p => `
+        <tr>
+          <td data-label="#">#${p.id}</td>
+          <td data-label="Socio">
+            <div style="font-weight:500;font-size:13px">${escHtml(p.nombreSocio)}</div>
+            <div style="font-size:11px;color:#9d91b8;font-family:monospace">${escHtml(p.cedulaSocio)}</div>
+          </td>
+          <td data-label="Libro">${escHtml(p.nombreLibro)}</td>
+          <td data-label="F. devolución" style="font-size:13px;color:#7c6fa0">${fmtFecha(p.fechaDevolucion)}</td>
+          <td data-label="Días" style="font-weight:600;color:#92400e">${p.diasAtraso}</td>
+          <td data-label="Mora" style="font-weight:700;color:#991b1b">$${p.mora}</td>
+          <td data-label="Estado">
+            <span class="tag ${p.moraPagada ? 'tag-pagada' : 'tag-mora'}">
+              ${p.moraPagada ? '✓ Pagada' : 'Pendiente'}
+            </span>
+          </td>
+          <td data-label="">
+            ${!p.moraPagada
+              ? `<button class="btn btn-success btn-sm" onclick="pagarMora(${p.id})">Marcar pagada</button>`
+              : '<span style="font-size:12px;color:#9d91b8">—</span>'}
+          </td>
+        </tr>`).join('');
+    }
+
+    async function pagarMora(id) {
+      if (!confirm('¿Marcar esta mora como pagada?')) return;
+      try {
+        const res  = await fetch(`/api/prestamos/${id}/pagar-mora`, { method: 'PUT' });
+        const data = await res.json();
+        toast(data.mensaje, res.ok ? 'ok' : 'err');
+        if (res.ok) cargar();
+      } catch (e) { toast('Error al actualizar la mora.', 'err'); }
+    }
+
+    document.getElementById('filtro').addEventListener('input', renderTabla);
+    document.getElementById('filtroPago').addEventListener('change', renderTabla);
+
+    cargar();
+  </script>
+</body>
+</html>
