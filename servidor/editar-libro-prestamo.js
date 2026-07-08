@@ -1,11 +1,16 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('bloom_mind', 'postgres', 'eliana25', {
-    host:    'localhost',
-    port:    5432,
-    dialect: 'postgres',
-    logging: false
-});
+const sequelize = new Sequelize(
+    process.env.DB_NAME     || 'bloom_mind',
+    process.env.DB_USER     || 'postgres',
+    process.env.DB_PASSWORD || 'eliana25',
+    {
+        host:    process.env.DB_HOST || 'localhost',
+        port:    process.env.DB_PORT || 5432,
+        dialect: 'postgres',
+        logging: false
+    }
+);
 
 const Libro = sequelize.define('Libro', {
     codigo:    { type: DataTypes.STRING, primaryKey: true },
