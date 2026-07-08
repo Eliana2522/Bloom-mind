@@ -20,7 +20,7 @@ Facilitar el control y la administración de los recursos de una biblioteca medi
 - Préstamos de libros
 - Devoluciones
 - Control de moras
-- 
+  
  **Capturas de Pantalla**
 
 **01. Login de Acceso**
@@ -61,10 +61,13 @@ Facilitar el control y la administración de los recursos de una biblioteca medi
 
 **Instalación**
 
-1.Clonar el repositorio.
-2.Configurar la base de datos PostgreSQL.
-3.Ejecutar el servidor con el comando: node server.js.
-4.Acceder al sistema desde el navegador.
+1. Clonar el repositorio.
+
+2. Configurar la base de datos PostgreSQL.
+
+3. Ejecutar el servidor con el comando: `node server.js`
+
+4. Acceder al sistema desde el navegador.
 
 
 **Integrantes**
