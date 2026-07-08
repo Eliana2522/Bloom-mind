@@ -1,8 +1,12 @@
 **Sistema de Biblioteca**
 
+**Nombre del proyecto**
+
+Bloom Mind
+
 **Descripción**
 
-El Sistema de Biblioteca es una aplicación web diseñada para administrar el registro de socios, libros, préstamos, devoluciones y el control de moras de una biblioteca.
+Bloom Mind es una aplicación web diseñada para administrar el registro de socios, libros, préstamos, devoluciones y el control de moras de una biblioteca.
 
 **Objetivo**
 
