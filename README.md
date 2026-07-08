@@ -20,6 +20,26 @@ Facilitar el control y la administración de los recursos de una biblioteca medi
 - Préstamos de libros
 - Devoluciones
 - Control de moras
+- 
+ **Capturas de Pantalla**
+
+**01. Login de Acceso**
+![Login](capturas/01-login.jpeg)
+
+**02. Menú Principal**
+![Menú Principal](capturas/02-menu.jpeg)
+
+**03. Gestión de Libros**
+![Catálogo de Libros](capturas/03-libros.jpeg)
+
+ **04. Control de Socios**
+![Administración de Socios](capturas/04-socios.jpeg)
+
+**05. Préstamos**
+![Registro de Préstamos](capturas/05-prestamos.jpeg)
+
+**06. Devoluciones**
+![Control de Devoluciones](capturas/06-devoluciones.jpeg)
 
 **Tecnologías utilizadas**
 
