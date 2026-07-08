@@ -4,7 +4,7 @@ const path     = require('path');
 const { Sequelize, DataTypes, Op } = require('sequelize');
 
 const app           = express();
-const PORT          = 3000;
+const PORT          = process.env.PORT || 3000;
 const MORA_POR_DIA  = 20;
 const DIAS_PRESTAMO = 7;
 
@@ -14,13 +14,21 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 /* ══════════════════════════════════════════
    BASE DE DATOS
+   Credenciales configurables por variables de entorno
+   (ver .env.example). Los valores por defecto mantienen
+   la configuración local existente.
 ══════════════════════════════════════════ */
-const sequelize = new Sequelize('bloom_mind', 'postgres', 'eliana25', {
-    host:    'localhost',
-    port:    5432,
-    dialect: 'postgres',
-    logging: false
-});
+const sequelize = new Sequelize(
+    process.env.DB_NAME     || 'bloom_mind',
+    process.env.DB_USER     || 'postgres',
+    process.env.DB_PASSWORD || 'eliana25',
+    {
+        host:    process.env.DB_HOST || 'localhost',
+        port:    process.env.DB_PORT || 5432,
+        dialect: 'postgres',
+        logging: false
+    }
+);
 
 const Usuario = sequelize.define('Usuario', {
     id:         { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
