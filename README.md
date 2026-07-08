@@ -10,12 +10,12 @@ Facilitar el control y la administración de los recursos de una biblioteca medi
 
 **Funcionalidades**
 
-- Inicio de sesión.
-- Registro de socios.
-- Registro de libros.
-- Préstamos de libros.
-- Devoluciones.
-- Control de moras.
+- Inicio de sesión
+- Registro de socios
+- Registro de libros
+- Préstamos de libros
+- Devoluciones
+- Control de moras
 
 **Tecnologías utilizadas**
 
@@ -37,10 +37,10 @@ Facilitar el control y la administración de los recursos de una biblioteca medi
 
 **Instalación**
 
-Clonar el repositorio.
-Configurar la base de datos PostgreSQL.
-Ejecutar el servidor con el comando: node server.js.
-Acceder al sistema desde el navegador.
+1.Clonar el repositorio.
+2.Configurar la base de datos PostgreSQL.
+3.Ejecutar el servidor con el comando: node server.js.
+4.Acceder al sistema desde el navegador.
 
 
 **Integrantes**
@@ -48,10 +48,10 @@ Acceder al sistema desde el navegador.
 - **Líder del proyecto:** Marialis Lantigua
 - **Programador Frontend:** Mario Miguel Ruiz
 - **Programador Backend:** Julio Elias Marmolejos
-- **Diseñador UI/UX:** Helen Chenoa Pichardo
+- **Diseñadora UI/UX:** Helen Chenoa Pichardo
 - **Tester:** Eliana Marmolejos
 - **Documentador:** Oscar Sebastian
 
 **Licencia**
 
-Proyecto desarrollado con fines académicos.
+Este proyecto fue desarrollado con fines académicos como parte de una práctica universitaria. Su uso es exclusivamente educativo.
